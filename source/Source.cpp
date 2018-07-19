@@ -1,5 +1,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <iostream>
+using namespace std;
 
 #define NUMPATTERNS 8
 #define OFFSETX 25
@@ -18,6 +20,8 @@ Mat menu;
 
 int mousex = -1;
 int mousey = -1;
+
+bool leftButtonPressed;
 
 void reset() {
 	memset(pieces, 0, sizeof(int)*400);
@@ -38,7 +42,10 @@ void save() {
 
 void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 {
-	if (event == EVENT_LBUTTONDOWN)
+	if (event == EVENT_LBUTTONUP) {
+		leftButtonPressed = false;
+	}
+	if (event == EVENT_LBUTTONDOWN || leftButtonPressed == true)
 	{
 		//cout << "Left button of the mouse is clicked - position (" << x << ", " << y << ")" << endl;
 		if (x > 650 + 21 && x < 650 + 21 + 59) {
@@ -61,7 +68,7 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 			int coordY = (y - OFFSETY) / 30;
 			pieces[coordY][coordX] = selectedPiece;
 		}
- 
+		leftButtonPressed = true;
 	}
 	else if (event == EVENT_RBUTTONDOWN)
 	{
